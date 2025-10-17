@@ -40,7 +40,6 @@ const Topbar = () => {
           />
         </motion.div>
 
-        {/* Desktop Navigation */}
         <motion.ul
           className="hidden md:flex items-center gap-6 lg:gap-[2.44rem]"
           initial={{ opacity: 0, x: 20 }}
@@ -68,7 +67,6 @@ const Topbar = () => {
           ))}
         </motion.ul>
 
-        {/* Mobile Menu Button */}
         <motion.button
           className="md:hidden relative z-50 w-8 h-8 flex flex-col items-center justify-center gap-1.5"
           onClick={toggleMenu}
@@ -95,7 +93,6 @@ const Topbar = () => {
           />
         </motion.button>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
           {isMenuOpen && (
             <>
@@ -109,7 +106,6 @@ const Topbar = () => {
                 onClick={closeMenu}
               />
 
-              {/* Menu Panel */}
               <motion.div
                 className="fixed top-0 right-0 bottom-0 w-64 bg-[#030237] border-l border-[rgba(0,76,235,0.28)] z-40 md:hidden"
                 initial={{ x: '100%' }}
