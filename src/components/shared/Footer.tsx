@@ -6,11 +6,11 @@ import { motion } from 'framer-motion';
 
 const Footer = () => {
   return (
-    <footer className="pt-[6rem] border-t border-[rgba(0,76,235,0.28)] pb-[0.81rem]">
-      <div className="flex flex-col items-center">
-        <header className="text-center space-y-[2.06rem]">
+    <footer className="pt-12 sm:pt-16 md:pt-20 lg:pt-[6rem] border-t border-[rgba(0,76,235,0.28)] pb-4 sm:pb-[0.81rem]">
+      <div className="flex flex-col items-center wrapper">
+        <header className="text-center space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-[2.06rem]">
           <motion.h2
-            className="max-w-[52.25rem] text-[3.875rem] font-semibold leading-[106%] tracking-[0.03875rem]"
+            className="max-w-[52.25rem] text-3xl sm:text-4xl md:text-5xl lg:text-[3.875rem] font-semibold leading-[106%] tracking-[0.03875rem] px-4"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
@@ -22,7 +22,7 @@ const Footer = () => {
             </span>
           </motion.h2>
           <motion.p
-            className="max-w-[26.5625rem] mx-auto text-[rgba(208,197,197,0.84)] leading-[109.809%] font-inter font-bold text-xl"
+            className="max-w-[26.5625rem] mx-auto text-[rgba(208,197,197,0.84)] leading-[109.809%] font-inter font-bold text-base sm:text-lg md:text-xl px-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
@@ -33,7 +33,7 @@ const Footer = () => {
         </header>
 
         <motion.div
-          className="flex items-center gap-[1.94rem] w-full mt-[3.13rem] justify-center"
+          className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[1.94rem] w-full mt-8 sm:mt-10 md:mt-12 lg:mt-[3.13rem] justify-center wrapper"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
@@ -41,7 +41,7 @@ const Footer = () => {
         >
           <motion.button
             type="button"
-            className="inline-flex items-center justify-center max-w-[14.625rem] w-full h-[3.6875rem] rounded-[3.125rem] bg-nexa-blue py-4 font-satoshi text-xl font-bold cursor-pointer"
+            className="inline-flex items-center justify-center max-w-full sm:max-w-[14.625rem] w-full h-[3.25rem] sm:h-[3.6875rem] rounded-[3.125rem] bg-nexa-blue py-3 sm:py-4 font-satoshi text-lg sm:text-xl font-bold cursor-pointer"
             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
             whileTap={{ scale: 0.95 }}
           >
@@ -49,7 +49,7 @@ const Footer = () => {
           </motion.button>
           <motion.button
             type="button"
-            className="inline-flex items-center justify-center max-w-[14.625rem] w-full h-[3.6875rem] rounded-[3.125rem] bg-white text-nexa-blue py-4 font-satoshi text-xl font-bold cursor-pointer"
+            className="inline-flex items-center justify-center max-w-full sm:max-w-[14.625rem] w-full h-[3.25rem] sm:h-[3.6875rem] rounded-[3.125rem] bg-white text-nexa-blue py-3 sm:py-4 font-satoshi text-lg sm:text-xl font-bold cursor-pointer"
             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
             whileTap={{ scale: 0.95 }}
           >
@@ -58,7 +58,7 @@ const Footer = () => {
         </motion.div>
 
         <motion.div
-          className="mt-[6.94rem]"
+          className="mt-12 sm:mt-16 md:mt-20 lg:mt-[6.94rem]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -70,11 +70,11 @@ const Footer = () => {
               whileInView={{ rotate: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.6, ease: 'backOut' }}
-              className="inline-flex w-[1.25rem] aspect-square"
+              className="inline-flex w-4 sm:w-5 md:w-[1.25rem] aspect-square"
             >
               <Image src={copyright} alt="copyright" />
             </motion.span>
-            <span className="text-nexa-copyright-blue font-inter text-[0.9375rem] font-medium leading-[109.809%]">
+            <span className="text-nexa-copyright-blue font-inter text-sm sm:text-[0.9375rem] font-medium leading-[109.809%]">
               2025 Nexa. Trust built on-chain
             </span>
           </p>

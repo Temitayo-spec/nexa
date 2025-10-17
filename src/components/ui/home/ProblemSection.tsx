@@ -29,10 +29,10 @@ const problems = [
 
 const ProblemSection = () => {
   return (
-    <section className="pt-[4.38rem]">
-      <div className="wrapper space-y-[8.94rem] flex flex-col items-center">
+    <section className="pt-12 sm:pt-16 md:pt-20 lg:pt-[4.38rem]">
+      <div className="wrapper space-y-12 sm:space-y-16 md:space-y-24 lg:space-y-[8.94rem] flex flex-col items-center px-4 sm:px-6 md:px-8">
         <motion.h2
-          className="max-w-[38.375rem] text-[3.4375rem] font-semibold leading-[109.809%] text-center"
+          className="max-w-[38.375rem] text-3xl sm:text-4xl md:text-5xl lg:text-[3.4375rem] font-semibold leading-[109.809%] text-center px-4"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
@@ -44,10 +44,10 @@ const ProblemSection = () => {
           </span>
         </motion.h2>
 
-        <div className="flex gap-[5.13rem] w-full justify-between">
+        <div className="flex flex-col sm:flex-col md:flex-row gap-6 sm:gap-8 md:gap-12 lg:gap-[5.13rem] w-full justify-between">
           {problems.map((problem, index) => (
             <motion.div
-              className="flex flex-col items-center max-w-[21.5625rem] h-[17.625rem] w-full flex-1 pb-8 pt-[1.69rem] rounded-[0.625rem] bg-[linear-gradient(141deg,#030237_20.67%,#0B085D_75.06%)] text-center"
+              className="flex flex-col items-center max-w-full md:max-w-[21.5625rem] h-auto md:h-[17.625rem] w-full flex-1 pb-6 sm:pb-8 pt-6 sm:pt-[1.69rem] px-4 rounded-[0.625rem] bg-[linear-gradient(141deg,#030237_20.67%,#0B085D_75.06%)] text-center"
               key={index}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -73,13 +73,13 @@ const ProblemSection = () => {
                   src={problem.icon}
                   alt={problem.title}
                   quality={100}
-                  className="w-[2.5625rem] aspect-square mb-[0.87rem]"
+                  className="w-8 sm:w-10 md:w-[2.5625rem] aspect-square mb-3 sm:mb-[0.87rem]"
                 />
               </motion.div>
-              <h3 className="text-2xl font-bold max-w-[11.6875rem] leading-[109.809%] mb-[2.31rem]">
+              <h3 className="text-xl sm:text-2xl font-bold max-w-full md:max-w-[11.6875rem] leading-[109.809%] mb-4 sm:mb-6 md:mb-[2.31rem]">
                 {problem.title}
               </h3>
-              <p className="text-[1.0625rem] font-inter font-bold mt-2 max-w-[13.5rem] text-[rgba(208,197,197,0.84)] leading-[109.809%]">
+              <p className="text-base sm:text-[1.0625rem] font-inter font-bold mt-2 max-w-full md:max-w-[13.5rem] text-[rgba(208,197,197,0.84)] leading-[109.809%]">
                 {problem.description}
               </p>
             </motion.div>
