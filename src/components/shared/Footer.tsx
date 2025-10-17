@@ -45,16 +45,16 @@ const Footer = () => {
             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
             whileTap={{ scale: 0.95 }}
           >
-            Join as a buyer
+            Connect Wallet
           </motion.button>
-          <motion.button
+          {/* <motion.button
             type="button"
             className="inline-flex items-center justify-center max-w-full sm:max-w-[14.625rem] w-full h-[3.25rem] sm:h-[3.6875rem] rounded-[3.125rem] bg-white text-nexa-blue py-3 sm:py-4 font-satoshi text-lg sm:text-xl font-bold cursor-pointer"
             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
             whileTap={{ scale: 0.95 }}
           >
             Join as a merchant
-          </motion.button>
+          </motion.button> */}
         </motion.div>
 
         <motion.div

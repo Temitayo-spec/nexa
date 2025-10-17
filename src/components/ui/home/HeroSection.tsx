@@ -21,7 +21,7 @@ const HeroSection = () => {
 
       <div className="flex flex-col items-center wrapper z-1 relative px-4 sm:px-6 md:px-8">
         <motion.div
-          className="max-w-[50.375rem] w-full"
+          className="max-w-[50.375rem] w-full max-sm:hidden"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
@@ -69,14 +69,14 @@ const HeroSection = () => {
               type="button"
               className="inline-flex items-center justify-center max-w-full sm:max-w-[14.625rem] w-full h-[3.25rem] sm:h-[3.6875rem] rounded-[3.125rem] bg-nexa-blue py-3 sm:py-4 font-satoshi text-lg sm:text-xl font-bold cursor-pointer hover:opacity-90 transition-opacity"
             >
-              Join as a buyer
+              Connect Wallet
             </button>
-            <button
+            {/* <button
               type="button"
               className="inline-flex items-center justify-center max-w-full sm:max-w-[14.625rem] w-full h-[3.25rem] sm:h-[3.6875rem] rounded-[3.125rem] bg-white text-nexa-blue py-3 sm:py-4 font-satoshi text-lg sm:text-xl font-bold cursor-pointer hover:opacity-90 transition-opacity"
             >
               Join as a merchant
-            </button>
+            </button> */}
           </motion.div>
         </div>
       </div>
