@@ -1,4 +1,3 @@
-// store/useStore.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -20,15 +19,12 @@ export interface CartItem extends Product {
 }
 
 interface StoreState {
-  // Products
   products: Product[];
   selectedCategory: string;
   favorites: string[];
 
-  // Cart
   cart: CartItem[];
 
-  // Actions
   setSelectedCategory: (category: string) => void;
   toggleFavorite: (productId: string) => void;
   addToCart: (product: Product, color?: string, size?: string) => void;
@@ -36,7 +32,6 @@ interface StoreState {
   updateCartItemQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
 
-  // Computed
   getCartTotal: () => number;
   getCartItemsCount: () => number;
 }

@@ -22,3 +22,7 @@
 .wrapper {
   @apply max-w-[1440px] w-[90%] mx-auto;
 }
+
+button {
+  @apply !cursor-pointer;
+}

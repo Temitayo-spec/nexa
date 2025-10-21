@@ -1,12 +1,14 @@
-// app/products/page.tsx
 'use client';
 
 import { useState } from 'react';
-import { useStore } from '@/store/useStore';
+import { Product, useStore } from '@/store/useStore';
 import { Heart, Filter } from 'lucide-react';
 import ProductModal from '@/components/ui/products/ProductModal';
 import Image from 'next/image';
 import { BasketIcon, CaretDown, ListHeart } from '@/components/shared/Icons';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import FavoritesSidebar from '@/components/ui/products/FavoritesSidebar';
 
 const categories = [
   'All categories',
@@ -27,9 +29,15 @@ export default function ProductsPage() {
     setSelectedCategory,
     favorites,
     toggleFavorite,
+    cart,
+    addToCart,
+    removeFromCart,
+    getCartItemsCount,
   } = useStore();
 
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const router = useRouter();
+
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showPriceRange, setShowPriceRange] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100]);
@@ -39,11 +47,48 @@ export default function ProductsPage() {
       ? products
       : products.filter((p) => p.category === selectedCategory);
 
-  // Duplicate products for grid display
   const displayProducts = [...filteredProducts, ...filteredProducts];
+
+  const handleToggleFavorite = (productId: string, productName: string) => {
+    const isFavorite = favorites.includes(productId);
+    toggleFavorite(productId);
+
+    if (isFavorite) {
+      toast.error('Removed from favorites', {
+        description: productName,
+      });
+    } else {
+      toast.success('Added to favorites', {
+        description: productName,
+      });
+    }
+  };
+
+  const handleAddToCart = (product: Product) => {
+    const isInCart = cart.some((item) => item.id === product.id);
+
+    if (isInCart) {
+      removeFromCart(product.id);
+      toast.error('Removed from cart', {
+        description: product.name,
+      });
+    } else {
+      addToCart(product);
+      toast.success('Added to cart', {
+        description: product.name,
+      });
+    }
+  };
+
+  const isProductInCart = (productId: string) => {
+    return cart.some((item) => item.id === productId);
+  };
+
+  const [isFavoritesSidebarOpen, setIsFavoritesSidebarOpen] = useState<boolean>(false);
 
   return (
     <div className="min-h-screen bg-nexa-deep-blue text-white">
+      <FavoritesSidebar isOpen={isFavoritesSidebarOpen} onClose={() => setIsFavoritesSidebarOpen(false)} />
       <header className="border-b-[0.5px] border-nexa-border px-6 py-4">
         <div className="wrapper max-w-7xl mx-auto flex items-center justify-between">
           <div className="text-[1.08206rem] font-semibold leading-[120%] inline-flex items-center">
@@ -77,16 +122,30 @@ export default function ProductsPage() {
               </div>
               <span className="text-base font-light">0.2 ETH</span>
             </div>
-            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors">
+            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer relative"
+              onClick={() => setIsFavoritesSidebarOpen(true)}
+            >
               <ListHeart />
+              {favorites.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {favorites.length}
+                </span>
+              )}
             </button>
-            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors">
+            <button
+              className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer relative"
+              onClick={() => router.push('/cart')}
+            >
               <BasketIcon />
+              {getCartItemsCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {getCartItemsCount()}
+                </span>
+              )}
             </button>
           </div>
         </div>
       </header>
-      {/* Categories */}
       <div className="py-[2.06rem] wrapper flex items-center justify-between gap-4">
         <div className="space-x-[0.6875rem] flex items-center ">
           {categories.map((category) => (
@@ -113,9 +172,7 @@ export default function ProductsPage() {
       <div className="wrapper mx-auto px-6 py-8">
         <div className="flex gap-8">
           <aside className="w-64 space-y-6">
-            {/* Filters */}
             <div className="space-y-4">
-              {/* Price Range Accordion */}
               <div className="bg-[#07053E] rounded-[0.5rem] py-[0.8125rem] px-[0.9375rem]">
                 <button
                   onClick={() => setShowPriceRange(!showPriceRange)}
@@ -182,7 +239,6 @@ export default function ProductsPage() {
                 )}
               </div>
 
-              {/* Brands Accordion */}
               <div className="bg-[#07053E] rounded-[0.5rem] py-[0.8125rem] px-[0.9375rem]">
                 <button
                   onClick={() => setShowBrands(!showBrands)}
@@ -220,7 +276,6 @@ export default function ProductsPage() {
                 )}
               </div>
 
-              {/* Additional Filters Accordion */}
               <div className="bg-[#07053E] rounded-[0.5rem] py-[0.8125rem] px-[0.9375rem]">
                 <button className="flex items-center justify-between w-full text-left text-gray-300 hover:text-white transition-colors text-xs cursor-pointer">
                   <span>Condition</span>
@@ -232,7 +287,6 @@ export default function ProductsPage() {
             </div>
           </aside>
 
-          {/* Products Grid */}
           <main className="flex-1">
             <div className="grid grid-cols-3 gap-6">
               {displayProducts.map((product, index) => (
@@ -279,14 +333,20 @@ export default function ProductsPage() {
                       </div>
                     </div>
                     <button
-                      onClick={() => toggleFavorite(product.id)}
-                      className="absolute top-[0.87rem] right-[0.81rem] bg-[#07053E] rounded-full hover:bg-gray-700 transition-colors cursor-pointer p-2"
+                      onClick={() =>
+                        handleToggleFavorite(product.id, product.name)
+                      }
+                      className={`absolute top-[0.87rem] right-[0.81rem] rounded-full transition-all cursor-pointer p-2 ${
+                        favorites.includes(product.id)
+                          ? 'bg-red-500/20 hover:bg-red-500/30'
+                          : 'bg-[#07053E] hover:bg-gray-700'
+                      }`}
                     >
                       <Heart
                         size={16}
-                        className={`w-4 h-4 ${
+                        className={`w-4 h-4 transition-all ${
                           favorites.includes(product.id)
-                            ? 'fill-red-500 text-red-500'
+                            ? 'fill-red-500 text-red-500 scale-110'
                             : 'text-gray-400'
                         }`}
                       />
@@ -299,8 +359,19 @@ export default function ProductsPage() {
                         {product.name}
                       </h3>
 
-                      <button className="flex items-center justify-center p-2 bg-[#060432] rounded-full cursor-pointer hover:bg-gray-700 transition-colors">
-                        <BasketIcon className="w-4 h-4" />
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className={`flex items-center justify-center p-2 rounded-full cursor-pointer transition-all ${
+                          isProductInCart(product.id)
+                            ? 'bg-red-500/20 hover:bg-red-500/30'
+                            : 'bg-[#060432] hover:bg-gray-700'
+                        }`}
+                      >
+                        <BasketIcon
+                          className={`w-4 h-4 ${
+                            isProductInCart(product.id) ? 'text-red-500' : ''
+                          }`}
+                        />
                       </button>
                     </div>
                     <div className="flex items-center justify-between">
@@ -322,7 +393,6 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Product Modal */}
       {selectedProduct && (
         <ProductModal
           product={selectedProduct}
