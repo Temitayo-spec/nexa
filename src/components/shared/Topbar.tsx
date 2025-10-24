@@ -7,9 +7,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
+// 🧩 Added imports
+import { useStore } from '@/store/useStore';
+import ConnectWalletModal from './ConnectWalletModal';
+
 const Topbar = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // 🧩 Added wallet + modal state
+  const { walletAddress } = useStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navItems = [
     { href: '/', label: 'Home' },
@@ -66,6 +74,22 @@ const Topbar = () => {
             </motion.li>
           ))}
         </motion.ul>
+
+        {/* 🧩 Wallet Button / Address */}
+        <div className="hidden md:flex items-center gap-4">
+          {walletAddress ? (
+            <span className="text-nexa-blue font-semibold text-sm">
+              {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+            </span>
+          ) : (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-nexa-blue px-4 py-2 rounded-lg text-white text-sm font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Connect Wallet
+            </button>
+          )}
+        </div>
 
         <motion.button
           className="md:hidden relative z-50 w-8 h-8 flex flex-col items-center justify-center gap-1.5"
@@ -141,6 +165,12 @@ const Topbar = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* 🧩 Modal Mount */}
+      <ConnectWalletModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </nav>
   );
 };

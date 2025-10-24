@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+
 export interface Product {
   id: string;
   name: string;
@@ -22,8 +23,11 @@ interface StoreState {
   products: Product[];
   selectedCategory: string;
   favorites: string[];
-
   cart: CartItem[];
+
+  // Wallet state
+  walletAddress: string | null;
+  
 
   setSelectedCategory: (category: string) => void;
   toggleFavorite: (productId: string) => void;
@@ -34,6 +38,9 @@ interface StoreState {
 
   getCartTotal: () => number;
   getCartItemsCount: () => number;
+
+  // Wallet setter
+  setWalletAddress: (address: string | null) => void;
 }
 
 const initialProducts: Product[] = [
@@ -77,6 +84,7 @@ export const useStore = create<StoreState>()(
       selectedCategory: 'All categories',
       favorites: [],
       cart: [],
+      walletAddress: null,
 
       setSelectedCategory: (category) => set({ selectedCategory: category }),
 
@@ -150,9 +158,9 @@ export const useStore = create<StoreState>()(
         const state = get();
         return state.cart.reduce((count, item) => count + item.quantity, 0);
       },
+
+      setWalletAddress: (address) => set({ walletAddress: address }),
     }),
-    {
-      name: 'nexa-store',
-    }
+    { name: 'nexa-store' }
   )
 );

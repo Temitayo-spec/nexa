@@ -3,8 +3,33 @@
 import Image from 'next/image';
 import copyright from '@/svgs/copyright.svg';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useStore } from '@/store/useStore';
 
 const Footer = () => {
+  const setWalletAddress = useStore((state) => state.setWalletAddress);
+  const router = useRouter();
+
+  const connectWallet = async () => {
+    if (!window.ethereum) {
+      alert('Please install MetaMask or another Web3 wallet.');
+      return;
+    }
+
+    try {
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+      const account = accounts[0];
+      setWalletAddress(account);
+      alert(`Wallet connected: ${account.slice(0, 6)}...${account.slice(-4)}`);
+      router.push('/seller'); // redirect to seller page
+    } catch (err) {
+      console.error(err);
+      alert('Failed to connect wallet.');
+    }
+  };
+
   return (
     <footer className="pt-12 sm:pt-16 md:pt-20 lg:pt-[6rem] border-t border-[rgba(0,76,235,0.28)] pb-4 sm:pb-[0.81rem]">
       <div className="flex flex-col items-center wrapper">
@@ -41,20 +66,13 @@ const Footer = () => {
         >
           <motion.button
             type="button"
+            onClick={connectWallet}
             className="inline-flex items-center justify-center max-w-full sm:max-w-[14.625rem] w-full h-[3.25rem] sm:h-[3.6875rem] rounded-[3.125rem] bg-nexa-blue py-3 sm:py-4 font-satoshi text-lg sm:text-xl font-bold cursor-pointer"
             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
             whileTap={{ scale: 0.95 }}
           >
             Connect Wallet
           </motion.button>
-          {/* <motion.button
-            type="button"
-            className="inline-flex items-center justify-center max-w-full sm:max-w-[14.625rem] w-full h-[3.25rem] sm:h-[3.6875rem] rounded-[3.125rem] bg-white text-nexa-blue py-3 sm:py-4 font-satoshi text-lg sm:text-xl font-bold cursor-pointer"
-            whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Join as a merchant
-          </motion.button> */}
         </motion.div>
 
         <motion.div
