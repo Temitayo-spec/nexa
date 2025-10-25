@@ -39,7 +39,7 @@ interface StoreState {
 
   // Wallet methods
   setWalletAddress: (address: string | null) => void;
-  disconnectWallet: () => void; // 🔥 New disconnect function
+  disconnectWallet: () => void; 
 }
 
 const initialProducts: Product[] = [
@@ -160,12 +160,12 @@ export const useStore = create<StoreState>()(
 
       setWalletAddress: (address) => set({ walletAddress: address }),
 
-      // 🔥 Disconnect wallet function
+    
       disconnectWallet: () => set({ walletAddress: null }),
     }),
     { 
       name: 'nexa-store',
-      // 🔥 Remove wallet from persistence - will disconnect on refresh
+      
       partialize: (state) => ({
         products: state.products,
         selectedCategory: state.selectedCategory,
