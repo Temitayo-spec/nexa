@@ -31,7 +31,7 @@ export default function ConnectWalletModal({ isOpen, onClose }: ConnectWalletMod
       const account = accounts[0];
       setWalletAddress(account);
       onClose();
-      router.push('/buyer'); // 🔥 Changed from '/seller' to '/buyer'
+      router.push('/buyer'); 
     } catch (err: any) {
       setError(err.message || 'Failed to connect wallet');
     } finally {
