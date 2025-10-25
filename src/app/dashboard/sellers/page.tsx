@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -17,9 +18,9 @@ import {
   User,
   Package,
 } from "lucide-react";
-import router from "next/router";
 
 export default function Page() {
+  const router = useRouter();
   const [activeMenu, setActiveMenu] = useState("Dashboard");
 
   const menuItems = [
