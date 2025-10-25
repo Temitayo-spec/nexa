@@ -41,6 +41,19 @@ export default function ProductsPage() {
   const [showPriceRange, setShowPriceRange] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100]);
+  const [isFavoritesSidebarOpen, setIsFavoritesSidebarOpen] = useState<boolean>(false);
+
+  // ✅ New toggle state
+  const [isSeller, setIsSeller] = useState(false);
+
+  const toggleMode = () => {
+    if (isSeller) {
+      router.push('/marketplace');
+    } else {
+      router.push('/dashboard/sellers');
+    }
+    setIsSeller(!isSeller);
+  };
 
   const filteredProducts =
     selectedCategory === 'All categories'
@@ -84,11 +97,11 @@ export default function ProductsPage() {
     return cart.some((item) => item.id === productId);
   };
 
-  const [isFavoritesSidebarOpen, setIsFavoritesSidebarOpen] = useState<boolean>(false);
-
   return (
     <div className="min-h-screen bg-nexa-deep-blue text-white">
       <FavoritesSidebar isOpen={isFavoritesSidebarOpen} onClose={() => setIsFavoritesSidebarOpen(false)} />
+
+      {/* ======= HEADER ======= */}
       <header className="border-b-[0.5px] border-nexa-border px-6 py-4">
         <div className="wrapper max-w-7xl mx-auto flex items-center justify-between">
           <div className="text-[1.08206rem] font-semibold leading-[120%] inline-flex items-center">
@@ -122,7 +135,9 @@ export default function ProductsPage() {
               </div>
               <span className="text-base font-light">0.2 ETH</span>
             </div>
-            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer relative"
+
+            <button
+              className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer relative"
               onClick={() => setIsFavoritesSidebarOpen(true)}
             >
               <ListHeart />
@@ -132,6 +147,7 @@ export default function ProductsPage() {
                 </span>
               )}
             </button>
+
             <button
               className="p-2 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer relative"
               onClick={() => router.push('/cart')}
@@ -143,9 +159,19 @@ export default function ProductsPage() {
                 </span>
               )}
             </button>
+
+            {/* ✅ Become a Seller toggle */}
+            <button
+              onClick={toggleMode}
+              className="ml-4 bg-[#004CEB] hover:bg-[#003bbd] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            >
+              {isSeller ? 'Go to Marketplace' : 'Become a Seller'}
+            </button>
           </div>
         </div>
       </header>
+
+      {/* ======= CATEGORIES ======= */}
       <div className="py-[2.06rem] wrapper flex items-center justify-between gap-4">
         <div className="space-x-[0.6875rem] flex items-center ">
           {categories.map((category) => (
@@ -169,9 +195,11 @@ export default function ProductsPage() {
         </button>
       </div>
 
+      {/* ======= PRODUCTS ======= */}
       <div className="wrapper mx-auto px-6 py-8">
         <div className="flex gap-8">
           <aside className="w-64 space-y-6">
+            {/* Price Range Filter */}
             <div className="space-y-4">
               <div className="bg-[#07053E] rounded-[0.5rem] py-[0.8125rem] px-[0.9375rem]">
                 <button
@@ -239,6 +267,7 @@ export default function ProductsPage() {
                 )}
               </div>
 
+              {/* Brands */}
               <div className="bg-[#07053E] rounded-[0.5rem] py-[0.8125rem] px-[0.9375rem]">
                 <button
                   onClick={() => setShowBrands(!showBrands)}
@@ -275,18 +304,10 @@ export default function ProductsPage() {
                   </div>
                 )}
               </div>
-
-              <div className="bg-[#07053E] rounded-[0.5rem] py-[0.8125rem] px-[0.9375rem]">
-                <button className="flex items-center justify-between w-full text-left text-gray-300 hover:text-white transition-colors text-xs cursor-pointer">
-                  <span>Condition</span>
-                  <span className="text-2xl">
-                    <CaretDown />
-                  </span>
-                </button>
-              </div>
             </div>
           </aside>
 
+          {/* Product Cards */}
           <main className="flex-1">
             <div className="grid grid-cols-3 gap-6">
               {displayProducts.map((product, index) => (
@@ -296,41 +317,14 @@ export default function ProductsPage() {
                 >
                   <div className="relative mb-4">
                     <div className="aspect-square flex items-center justify-center">
-                      <div className="w-full h-full flex items-center justify-center">
-                        {product.category === 'fashion accessories' &&
-                          index % 3 === 0 && (
-                            <Image
-                              src={product.image}
-                              alt={product.name}
-                              width={150}
-                              height={150}
-                              className="object-contain h-[9.375rem] w-full"
-                              quality={100}
-                            />
-                          )}
-                        {product.category === 'fashion accessories' &&
-                          index % 3 === 1 && (
-                            <Image
-                              src={product.image}
-                              alt={product.name}
-                              width={150}
-                              height={150}
-                              className="object-contain h-[9.375rem] w-full"
-                              quality={100}
-                            />
-                          )}
-                        {(product.category === 'Gadgets' ||
-                          index % 3 === 2) && (
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={150}
-                            height={150}
-                            className="object-contain h-[9.375rem] w-full"
-                            quality={100}
-                          />
-                        )}
-                      </div>
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={150}
+                        height={150}
+                        className="object-contain h-[9.375rem] w-full"
+                        quality={100}
+                      />
                     </div>
                     <button
                       onClick={() =>
