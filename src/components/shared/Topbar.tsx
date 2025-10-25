@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { LogOut } from 'lucide-react';
 
 // 🧩 Added imports
 import { useStore } from '@/store/useStore';
@@ -16,18 +17,23 @@ const Topbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // 🧩 Added wallet + modal state
-  const { walletAddress } = useStore();
+  const { walletAddress, disconnectWallet } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navItems = [
     { href: '/', label: 'Home' },
     { href: '/marketplace', label: 'Marketplace' },
-    { href: '/profile', label: 'Profile' },
+    { href: walletAddress ? '/seller' : '/profile', label: 'Profile' }, // 🔥 Dynamic profile link
     { href: '/about-us', label: 'About us' },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+
+  // 🔥 Disconnect handler
+  const handleDisconnect = () => {
+    disconnectWallet();
+  };
 
   return (
     <nav className="relative z-10">
@@ -75,12 +81,22 @@ const Topbar = () => {
           ))}
         </motion.ul>
 
-        {/* 🧩 Wallet Button / Address */}
+        {/* 🧩 Wallet Button / Address with Disconnect */}
         <div className="hidden md:flex items-center gap-4">
           {walletAddress ? (
-            <span className="text-nexa-blue font-semibold text-sm">
-              {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-nexa-blue font-semibold text-sm">
+                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+              </span>
+              <button
+                onClick={handleDisconnect}
+                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-white text-sm font-semibold transition-colors"
+                title="Disconnect Wallet"
+              >
+                <LogOut size={16} />
+                Disconnect
+              </button>
+            </div>
           ) : (
             <button
               onClick={() => setIsModalOpen(true)}
@@ -159,6 +175,44 @@ const Topbar = () => {
                       </Link>
                     </motion.li>
                   ))}
+                  
+                  {/* Mobile Wallet Section */}
+                  {walletAddress ? (
+                    <motion.li
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="pt-4 border-t border-gray-700"
+                    >
+                      <div className="text-nexa-blue text-sm mb-3">
+                        {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                      </div>
+                      <button
+                        onClick={() => {
+                          handleDisconnect();
+                          closeMenu();
+                        }}
+                        className="flex items-center gap-2 bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-white text-sm font-semibold transition-colors w-full justify-center"
+                      >
+                        <LogOut size={16} />
+                        Disconnect
+                      </button>
+                    </motion.li>
+                  ) : (
+                    <motion.li
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                    >
+                      <button
+                        onClick={() => {
+                          setIsModalOpen(true);
+                          closeMenu();
+                        }}
+                        className="bg-nexa-blue px-4 py-2 rounded-lg text-white text-sm font-semibold hover:bg-blue-700 transition-colors w-full"
+                      >
+                        Connect Wallet
+                      </button>
+                    </motion.li>
+                  )}
                 </ul>
               </motion.div>
             </>

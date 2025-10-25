@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-
 export interface Product {
   id: string;
   name: string;
@@ -27,7 +26,6 @@ interface StoreState {
 
   // Wallet state
   walletAddress: string | null;
-  
 
   setSelectedCategory: (category: string) => void;
   toggleFavorite: (productId: string) => void;
@@ -39,8 +37,9 @@ interface StoreState {
   getCartTotal: () => number;
   getCartItemsCount: () => number;
 
-  // Wallet setter
+  // Wallet methods
   setWalletAddress: (address: string | null) => void;
+  disconnectWallet: () => void; // 🔥 New disconnect function
 }
 
 const initialProducts: Product[] = [
@@ -48,7 +47,7 @@ const initialProducts: Product[] = [
     id: '1',
     name: 'Retro-Chic Marathon Sneakers for Peak Performance',
     description:
-      'Experience the ultimate in retro style and high-performance with the Zephyr Runner. These sneakers combine a classic design with modern technology, featuring a responsive sole for maximum energy return and a breathable upper for superior comfort.',
+      'Experience the ultimate in retro style and high-performance with the Zephyr Runner.',
     price: 0.06,
     image: '/images/sneakers.png',
     category: 'fashion accessories',
@@ -160,7 +159,20 @@ export const useStore = create<StoreState>()(
       },
 
       setWalletAddress: (address) => set({ walletAddress: address }),
+
+      // 🔥 Disconnect wallet function
+      disconnectWallet: () => set({ walletAddress: null }),
     }),
-    { name: 'nexa-store' }
+    { 
+      name: 'nexa-store',
+      // 🔥 Remove wallet from persistence - will disconnect on refresh
+      partialize: (state) => ({
+        products: state.products,
+        selectedCategory: state.selectedCategory,
+        favorites: state.favorites,
+        cart: state.cart,
+        // walletAddress is NOT persisted
+      }),
+    }
   )
 );
